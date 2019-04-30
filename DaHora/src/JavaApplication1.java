@@ -7,15 +7,12 @@ public class JavaApplication1 {
 
 
     
-    public static void main (String arg []){
+   public static void main (String arg []){
 		Scanner ler = new Scanner(System.in);
         // Conteudo
 
-		System.out.printf("Informe seu nome:\n");
+		System.out.printf("Informe Seu nome:\n");
 		String content = ler.nextLine();
-                System.out.printf("Informe seu CPF:\n");
-		String content = ler.nextLine();
-                
 		        try {
 
             // Cria arquivo
@@ -47,7 +44,8 @@ public class JavaApplication1 {
 
         } catch (IOException e) {
         }
-                        menu();
+    }
+                     menu();
 		System.out.println("Programa encerrado.");
 	//  menu principal
 	private static void menu() { // menu principal
