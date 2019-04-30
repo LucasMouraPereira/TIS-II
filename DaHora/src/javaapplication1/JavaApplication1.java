@@ -8,6 +8,11 @@ public class JavaApplication1 {
 
     
     public static void main(String[] args) {
+        
+        Scanner ler = new Scanner(System.in);
+        System.out.printf("Informe Seu nome:\n");
+        String String = ler.nextLine(); 
+        
         try {
             // Conteudo
             //String content = "Rajha";

@@ -24,24 +24,24 @@ import java.util.Map;
  */
 public class Empresa {
 
-    private static final Map<String, Funcionario> Cadastro = new HashMap<>();
+    private static final Map<String, Empresa> Cadastro = new HashMap<>();
 
 
-    public static Funcionario pesquisar(String login) {
-        return Funcionario.get(login);
+    public static Empresa pesquisar(String nome) {
+        return Empresa.get(nome);
     }
 
-    private static Funcionario get(String login) {
+    private static Funcionario get(String nome) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     private final String nome;
-    private final String cpf;
+    private final String cnpj;
     
 
-    public Funcionario(String nome, String cpf) {
+    public Empresa(String nome, String cnpj) {
         
         this.nome = nome;
-        this.cpf = cpf;
+        this.cnpj = cnpj;
     }
 }
