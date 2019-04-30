@@ -1,7 +1,7 @@
 package javaapplication1;
 
 import java.io.*;
-import.java.util.Scanner;
+import java.util.Scanner;
 
 public class JavaApplication1 {
 
@@ -24,6 +24,7 @@ public class JavaApplication1 {
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             // Escreve e fecha arquivo
             try (BufferedWriter bw = new BufferedWriter(fw)) {
+                char[] content = null;
                 // Escreve e fecha arquivo
                 bw.write(content);
             }
