@@ -1,158 +1,133 @@
+
 import java.io.*;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class JavaApplication1 {
-    
-   public static void main (String arg []){
-	  
-         // menu principal
-		int opcao = 0;
-		Scanner lerOption = new Scanner(System.in);
-		do {
-                        System.out.println("              \n\n#### DaHora - Banco de Horas  ####");
-			System.out.println("\n                  ================================");
-			System.out.println("                  |     1 - Cadastro Funcionário   |");
-			System.out.println("                  |     2 - Cadastro Empresa       |");
-			System.out.println("                  |     3 - Consulta Funcionário   |");
-			System.out.println("                  |     4 - Consulta Empresa       |");
-			System.out.println("                  |     5 - Fazer Check in         |");
-			System.out.println("                  |     6 - Fazer Check out        |");
-			System.out.println("                  |     0 - Sair                   |");
-			System.out.println("                  =================================\n");
-			System.out.println                    ("Opção -> ");
-			opcao = lerOption.nextInt();			
+
+
+    public static void main(String arg[]) throws FileNotFoundException {
+    	
+    	File fileFunc = new File("Funcionario.txt");
+    	File fileEmpre = new File("Company.txt");
+    	File fileHorastrab = new File("HorasTrabalhadas.txt");
+    	
+        int opcao;
+        Scanner lerOption = new Scanner(System.in);
+        Scanner ler = new Scanner(System.in);
+        
+        do {
+        	Menu.imprimiMenu();
+			opcao = lerOption.nextInt();
+			
 			System.out.print("\n");
 			switch (opcao) {
-			case 1: CadastroFuncionario();
-				break;
-			case 2:
-				CadastroEmpresa ();
-				break;
-                       case 3:
-				ConsultaFuncionario ();
-				break;
-                       case 4:
-				ConsultaEmpresa ();
-				break;
-                       case 5:
-				FazerCheckIn();
-				break;
-                       case 6:
-				FazerCheckOut();
-				break;        
-			case 0:
-				break;
-			default:
-				System.out.println("Opção Inválida!");
-				break;
-			}
-		} while (opcao != 0);
-		System.out.println("Programa encerrado.");		
-   }
-   private static void CadastroFuncionario() {       
-       Scanner ler = new Scanner(System.in);
-            // Conteudo
-            System.out.printf("Informe seu nome:\n");
-            String nome = ler.nextLine();
-            System.out.printf("Informe seu CPF:\n");
-            String cpf = ler.nextLine();				
-            try {
-           // Cria arquivo
-           File file = new File("teste.txt");
-           // Se o arquivo nao existir, ele gera
-           if (!file.exists()) {
-               file.createNewFile();
-           }
-           // Prepara para escrever no arquivo
-           FileWriter fw = new FileWriter(file.getAbsoluteFile());
-           // Escreve e fecha arquivo
-           try (BufferedWriter bw = new BufferedWriter(fw)) {
-               // Escreve e fecha arquivo
-               bw.write(nome + "\n");
-               bw.write(cpf + "\n");               
-           }           
-           // Le o arquivo
-           FileReader ler1 = new FileReader("teste.txt");
-           BufferedReader reader = new BufferedReader(ler1);  
-           String linha;
-           while( (linha = reader.readLine()) != null ){
-               System.out.println(linha);
-           }
-           // Imprime confirmacao
-           System.out.println("Feito =D");
-       } catch (IOException e) {
-       }       
-   }
-   private static void CadastroEmpresa() {
-       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-   }
-   private static void ConsultaFuncionario() {
-       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-   }
-   private static void ConsultaEmpresa() {
-       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-   }
-   private static void FazerCheckIn() {
-       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-   }
-   private static void FazerCheckOut() {
-       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-   }                     
+			
+                case 1:
+                	
+                    System.out.printf("Informe o nome do Funcionario:\n");
+                    String nome = ler.nextLine();
+                    System.out.printf("Informe o CPF do funcionario:\n");
+                    String cpf = ler.nextLine();
+    		 		Funcionario.CadastroFuncionario(fileFunc, (new Funcionario(nome, cpf)));
+                    
+                    break;
+                case 2:
+        
+                	System.out.printf("Informe a Razão Social da empresa:\n");
+    		 		String razaosocial = ler.nextLine();
+    		 		System.out.printf("Informe o CNPJ da empresa:\n");
+    		 		String cnpj = ler.nextLine();
+    		 		Empresa.CadastroEmpresa(fileEmpre, (new Empresa(razaosocial, cnpj)));
+    		 		
+    				break;
+                case 3:
+                	
+                    System.out.printf("Informe o nome do funcionario que deseja pesquisar:\n");
+                    nome = ler.nextLine();
+                    Funcionario.ConsultaFuncionario(fileFunc, nome);
+                    System.out.println(Funcionario.ConsultaFuncionario(fileFunc, nome));
+              
+                    break;
+                case 4:
+                	
+                	System.out.printf("Informe a razão social da empresa que deseja pesquisar:\n");
+                	razaosocial = ler.nextLine();
+                    Empresa.ConsultaEmpresa(fileEmpre, razaosocial);
+                    System.out.println(Empresa.ConsultaEmpresa(fileEmpre, razaosocial));
+                    
+                    break;
+                    
+                case 5:
+                	System.out.printf("Informe o nome do funcionario que deseja excluir:\n");
+                	nome = ler.nextLine();
+                	Funcionario.excluirFuncionario(fileFunc, nome);
+                	break;
+                case 6:
+                	System.out.printf("Informe a razão social da empresa que deseja excluir:\n");
+                	razaosocial = ler.nextLine();
+                	Empresa.excluirEmpresa(fileEmpre, razaosocial);
+                	break;
+                case 7:
+                	
+                	 HorasTrabalhadas horas = new HorasTrabalhadas();
+                	 System.out.printf("Confirmar ponto de chegada?\n");
+                	 System.out.printf("Sim[s] ou Não[n]?\n");
+                	 String respE = ler.nextLine();
+                	 if (respE.equals("s")) {
+                		 System.out.printf("Hora de chegada:" + HorasTrabalhadas.CheckIn());
+                	 } else {
+                		 System.out.println("Programa encerrado.");
+                	 }
+                	 
+                	 break;
+                case 8:
+                	
+                	System.out.printf("Confirmar ponto de saída?\n");
+                    System.out.printf("Sim[s] ou Não[n]?\n");
+                    String respS = ler.nextLine();
+                    if (respS.equals("s")) {
+                        System.out.printf("Hora de saida:" + HorasTrabalhadas.CheckOut());
+                    } else {
+                        System.out.println("Programa encerrado.");
+                    }
+                    
+                    break;
+                case 0:
+                    break;
+                default:
+                    System.out.println("Opção Inválida!");
+                    break;
+            }
+        } while (opcao != 0);
 
-	Scanner ler = new Scanner(System.in);
-        // Conteudo
-        System.out.printf("Informe Seu nome:\n");
-	String content = ler.nextLine();
-        try {
-        // Cria arquivo
-        File file = new File("teste.txt");
-        // Se o arquivo nao existir, ele gera
-        if (!file.exists()) {
-             try {
-                file.createNewFile();
-           } catch (IOException ex) {
-                    Logger.getLogger(JavaApplication1.class.getName()).log(Level.SEVERE, null, ex);
-           }
-           }
-        // Prepara para escrever no arquivo
-            FileWriter fw = null;
-        try {
-            fw = new FileWriter(file.getAbsoluteFile());
-        } catch (IOException ex) {
-            Logger.getLogger(JavaApplication1.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        // Escreve e fecha arquivo
-            try (BufferedWriter bw = new BufferedWriter(fw)) {
-                try {
-        // Escreve e fecha arquivo
-                    bw.write(content);
-                } catch (IOException ex) {
-                    Logger.getLogger(JavaApplication1.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } catch (IOException ex) {
-           Logger.getLogger(JavaApplication1.class.getName()).log(Level.SEVERE, null, ex);
-        }            
-        // Le o arquivo
-            FileReader ler1 = null;
-        try {
-            ler1 = new FileReader("teste.txt");
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(JavaApplication1.class.getName()).log(Level.SEVERE, null, ex);
-        }
-            BufferedReader reader = new BufferedReader(ler1);  
-            String linha;
-       try {
-           while( (linha = reader.readLine()) != null ){
-               System.out.println(linha);
-           }
-        } catch (IOException ex) {
-           Logger.getLogger(JavaApplication1.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        // Imprime confirmacao
-            System.out.println("Feito =D");
-        } catch (IOException e) {
-        }
-}  
+        System.out.println("Programa encerrado.");
+    }
 
+    
+
+//    private static void ConsultaEmpresa() {
+        
+//
+//        File dir = new File("C:\\TutorialArquivos");
+//        File arq = new File(dir, "User.txt");
+//
+//        try {
+//
+//            FileReader fileReader = new FileReader(arq);
+//            BufferedReader bufferedReader = new BufferedReader(fileReader);
+//            String linha = bufferedReader.readLine();
+//            while (linha != null) {
+//                if (ListaEmpresa.equals(nome)) {
+//                    System.out.println("Empresa cadastrada");
+//                } else {
+//                    System.out.println("Empresa não cadastrada");
+//                }
+//                linha = bufferedReader.readLine();
+//            }
+//            fileReader.close();
+//            bufferedReader.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+}
