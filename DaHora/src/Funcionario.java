@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
 public class Funcionario {
 
@@ -27,8 +29,8 @@ public class Funcionario {
 		return cpf;
 	}
 
-	private static String nome;
-	private String cpf;
+	private String nome;
+	private static String cpf;
 
 	public Funcionario(String nome, String cpf) {
 
@@ -64,63 +66,101 @@ public class Funcionario {
 	}
 
 	public static String ConsultaFuncionario(File fileFunc, String nomeFunc) throws FileNotFoundException {
-
+		
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(fileFunc));
+		String linha = "";
+		
 		try {
 			
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(fileFunc));
-			String linha = "";
-			String vetorlido[];
-			vetorlido = linha.split(" - ");
-			
-			while ((linha = bufferedReader.readLine())!= null && vetorlido[0] != nomeFunc) {
+			while ((linha = bufferedReader.readLine())!= null && !linha.contains(nomeFunc)) {
 				
-				linha = bufferedReader.readLine();
-	
-			}
-			if (vetorlido[0] == nomeFunc) {
-				System.out.println(linha);
-			}else {
-				System.out.println("Funcionario não encontrado");
+				if(linha.contains(nomeFunc)) {
+					System.out.println(linha);
+				} else 
+					System.out.println("Funcionário não encontrado");
 			}
 		}
 			catch (IOException e) {
+				System.err.println("Erro na abertura do arquivo " + fileFunc);  
+		        return linha;  
 		}
-		return nomeFunc;
+		return linha;
 	}
+
+	public static void excluirFuncionario(File fileFunc, String nomeFunc) throws FileNotFoundException{
+		
+		try {
+			FileReader fileReader = new FileReader(fileFunc);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			
+			String linha = bufferedReader.readLine();
+			ArrayList<String> salvar = new ArrayList();
+			
+			while(linha != null) {
+				if(!linha.contains(nomeFunc)) {
+					salvar.add(linha);
+				}
+				linha = bufferedReader.readLine();
+			}
+			
+			bufferedReader.close();
+			fileReader.close();
+			FileWriter fileWriter2 = new FileWriter(fileFunc, true);
+			fileWriter2.close();
+			
+			FileWriter fileWriter = new FileWriter(fileFunc);
+			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+			
+			for(int i = 0; i<salvar.size(); i++) {
+				bufferedWriter.write(salvar.get(i));
+				bufferedWriter.newLine();
+			}
+			bufferedWriter.close();
+			fileWriter.close();
+			
+		}catch(IOException ex) {
+			
+		}
+	}
+
+public static String alterarFuncionario(File fileFunc, String nomeFunc, String cpfFunc) throws FileNotFoundException{
 	
-	public static String excluirFuncionario(File fileFunc, String nomeFunc) throws FileNotFoundException{
-		return nomeFunc;
+	String linhaReescrita = null;
+	
+	try {
+		FileReader fileReader = new FileReader(fileFunc);
+		BufferedReader bufferedReader = new BufferedReader(fileReader);
 		
-		//exemplo de codigo para excluir
+		String linha = bufferedReader.readLine();
+		ArrayList<String> salvar = new ArrayList();
 		
-//			String contatoAExcluir = "ASDF";
-//        FileReader fileReader = null;  
-//        FileWriter fileWriter = null;   
-//        BufferedReader leitor = null;  
-//        String nomeDoArquivo = "F:\parte1.txt";
-//        String arquivoConferir = "F:\Conferir2.txt";  
-//        String line = "";  
-//        try {  
-//            fileReader = new FileReader(new File(nomeDoArquivo));  
-//            fileWriter = new FileWriter(new File(arquivoConferir)); 
-//            leitor = new BufferedReader(fileReader);
-//            line = "";  
-//            while ((line = leitor.readLine()) != null) {  
-//                if(!line.trim().equals(contatoAExcluir.trim())) { 
-//                        fileWriter.write(line + "\r\n"); 
-//                    }  
-//                }  
-//            }  
-//        } catch (IOException e) {  
-//            e.printStackTrace();  
-//        } finally   {  
-//            try {  
-//                fileWriter.close();
-//                fileReader.close();  
-//            } catch (IOException e) {  
-//                e.printStackTrace();  
-//            }  
-//        }  
-//    }  
+		while(linha != null) {
+			if(linha.contains(nomeFunc)) {
+				salvar.add(linha);
+				linhaReescrita = linha.replaceAll(linha, cpfFunc);;
+			}
+			linha = bufferedReader.readLine();
+		}
+		
+		bufferedReader.close();
+		fileReader.close();
+		FileWriter fileWriter2 = new FileWriter(fileFunc, true);
+		fileWriter2.close();
+		
+		FileWriter fileWriter = new FileWriter(fileFunc);
+		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+		
+		for(int i = 0; i<salvar.size(); i++) {
+			bufferedWriter.write(salvar.get(i));
+			bufferedWriter.newLine();
+		}
+		bufferedWriter.close();
+		fileWriter.close();
+		
+		
+	}catch(IOException ex) {
+		
 	}
+	return linhaReescrita;
+}
 }		
